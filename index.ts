@@ -1,7 +1,5 @@
 import * as http from "http";
 import App from "./app";
-import app from "./app";
-
 // -->Set: port
 const port = normalizePort(process.argv[3] || "9988");
 App.set("port", port);
@@ -16,11 +14,10 @@ App.all("*", function(req, res, next) {
     next();
 });
 */
-const server = http.createServer(App);
-
-server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+http.createServer(App)
+    .listen(port)
+    .on("error", onError)
+    .on("listening", onListening);
 
 function normalizePort(val: number|string): number|string|boolean {
     // tslint:disable-next-line:no-shadowed-variable

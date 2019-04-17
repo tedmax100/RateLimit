@@ -4,7 +4,9 @@ import expressWinston from "express-winston";
 import path from "path";
 import mkdirp from "mkdirp";
 import {fileTransport, logger} from "./logger";
-import rateLimit = require("./middleware/rateLimit");
+import {RateLimit, SetRateLimitParams} from "./middleware/rateLimit";
+import {indexRouter} from "./router/index";
+import { RedisConnect } from "./repository/rateLimit";
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -22,6 +24,8 @@ class App {
         this.routes();
         logger.info("start");
         // todo: prepare your db here
+        RedisConnect();
+        SetRateLimitParams(60, 60);
     }
 
     private createLogFolder = async () => {
@@ -39,7 +43,7 @@ class App {
             ],
         }));
 
-        this.express.use(rateLimit);
+        this.express.use(RateLimit);
     }
 
     /**
@@ -48,7 +52,7 @@ class App {
      *      -- check the sample
      */
     private routes(): void {
-
+        this.express.use("/", indexRouter);
     }
 }
 // tslint:disable-next-line:no-default-export
