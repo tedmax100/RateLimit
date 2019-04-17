@@ -1,26 +1,45 @@
 import express from "express";
 import * as bodyParser from "body-parser";
+import expressWinston from "express-winston";
+import path from "path";
+import mkdirp from "mkdirp";
+import {fileTransport, logger} from "./logger";
+import rateLimit = require("./middleware/rateLimit");
 
 // Creates and configures an ExpressJS web server.
 class App {
     public express: express.Application;
-
+    private fileBase: string = path.resolve(__dirname, '../logs/');
     /**
      * Configure Express middleware.
      */
     constructor() {
         // -->Init: routes
+        this.createLogFolder();
         this.express = express();
         
         this.middleware();
         this.routes();
-        
+        logger.info("start");
         // todo: prepare your db here
+    }
+
+    private createLogFolder = async () => {
+        mkdirp(this.fileBase, (err) => {
+            err ? logger.error(err) : logger.info(`${this.fileBase} have created`);
+        });
     }
     private middleware(): void {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.text());
         this.express.use(bodyParser.urlencoded({ extended: false }));
+        this.express.use(expressWinston.logger({
+            transports: [
+                fileTransport
+            ],
+        }));
+
+        this.express.use(rateLimit);
     }
 
     /**
