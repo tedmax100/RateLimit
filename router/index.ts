@@ -18,8 +18,9 @@ export class IndexRoutes {
         res.setHeader("X-RateLimit-Remaining", req.conext.limit - req.conext.cnt!);
         if(req.conext.reset !== undefined) { 
             res.setHeader("X-RateLimit-Reset", req.conext.reset!); 
-            return res.send("Error"); }
-        return res.send(req.conext.cnt!.toString());
+            return res.json("Error"); }
+        // console.log(req.conext.cnt);
+        return res.json(req.conext.cnt!);
     }
 }
 

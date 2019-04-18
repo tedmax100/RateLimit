@@ -1,12 +1,9 @@
 import path from "path";
-import * as _winston from "winston";
+import {createLogger, transports, format} from "winston";
 
-/* import winston = require("winston");
-const circularjson = require("circular-json");
- */
 const logPath = path.resolve(__dirname, '../logs/');
 
-const fileTransport = new _winston.transports.File({
+const fileTransport = new transports.File({
     filename : path.resolve(logPath, "service.log"),
     handleExceptions: true,
     maxsize: 50000000,
@@ -15,35 +12,19 @@ const fileTransport = new _winston.transports.File({
     level: 'debug',
     zippedArchive: true
 });
-/* const jsonFormatter = (item: any) => {
-    item.timestamp = new Date().toISOString(); */
-/*     item.meta.message = item.message;
-    item.meta.timestamp = new Date().toISOString();
-    item.meta.level = item.level; */
-/*     try { */
-        //console.dir(item);
-        //console.dir(circularjson.stringify(item));
-        
-/*         return circularjson.stringify(item);
-    }
-    catch (exp) {
-        return "";
-    }
-} */
 
-const logger = _winston.createLogger({
+const logger = createLogger({
     transports: [
         fileTransport
     ],
     exceptionHandlers: [
-      new _winston.transports.File({
+      new transports.File({
           filename: path.resolve(logPath, "error.log"),
         }),
     ],
-    //format: winston.format(jsonFormatter)()
-    format: _winston.format.combine(
-        _winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss:fff'}),
-        _winston.format.simple()
+    format: format.combine(
+        format.timestamp({format: 'YYYY-MM-DD HH:mm:ss:fff'}),
+        format.simple()
     )
 });
 

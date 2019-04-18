@@ -1,6 +1,6 @@
 import express from "express";
 import * as bodyParser from "body-parser";
-import expressWinston from "express-winston";
+import {logger as expressLogger} from "express-winston";
 import path from "path";
 import mkdirp from "mkdirp";
 import {fileTransport, logger} from "./logger";
@@ -22,7 +22,6 @@ class App {
         
         this.middleware();
         this.routes();
-        logger.info("start");
         // todo: prepare your db here
         RedisConnect();
         SetRateLimitParams(60, 60);
@@ -37,7 +36,7 @@ class App {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.text());
         this.express.use(bodyParser.urlencoded({ extended: false }));
-        this.express.use(expressWinston.logger({
+        this.express.use(expressLogger({
             transports: [
                 fileTransport
             ],
