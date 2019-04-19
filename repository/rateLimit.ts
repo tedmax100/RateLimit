@@ -1,12 +1,13 @@
 import redis from "redis";
 import {logger} from "../logger";
 import { RateLimitContext } from "../dataModel/RateLimit";
+import {GetConfig} from "../dataModel/Config";
 
 let options: redis.ClientOpts = {
-    host: "127.0.0.1",
-    port:  6379,
+    host: GetConfig().redis.host,
+    port:  GetConfig().redis.port,
     detect_buffers: true,
-    db: 0,
+    db: GetConfig().redis.db,
     retry_strategy: options =>  {
         if(options.error && options.error.code === 'ECONNREFUSED') {
             return new Error('The server refused the connection');
