@@ -6,6 +6,7 @@ import {logger} from "../logger";
 import * as _winston from "winston";
 import * as reateLimitFunc from "../repository/rateLimit";
 import * as expressWinston from "express-winston";
+import {GetConfig} from "../dataModel/Config";
 
 const mockCreateLogger = jest.fn().mockImplementation(() => {
     log: jest.fn()
@@ -21,10 +22,10 @@ jest.spyOn(expressWinston, "logger").mockImplementation((option) => mockHandler)
 
 describe("RateLimit test cases", () => {
     let client: redis.RedisClient = redis.createClient({
-        host: "127.0.0.1",
-        port:  6379,
+        host: GetConfig().redis.host,
+        port:  GetConfig().redis.port,
         detect_buffers: true,
-        db: 0,
+        db: GetConfig().redis.db,
         retry_strategy: options =>  {
             if(options.error && options.error.code === 'ECONNREFUSED') {
                 return new Error('The server refused the connection');

@@ -16,4 +16,16 @@
 這次資料結構我使用SortedSet，以IP當Key, 當下的請求時間做Value和Score。方便我計算有幾筆資料，和移除過期的資料。
 
 ## 使用方式
-1. 
+1. 修改config.json的redis host、port、db
+2. 安裝依賴套件
+```
+npm install
+```
+3. run test
+```
+npm test
+```
+4. start server
+```
+npm start
+```
