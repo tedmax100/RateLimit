@@ -48,13 +48,14 @@ const checkRateLimtLua: string = `
     redis.call('ZREMRANGEBYSCORE', KEYS[1], 0, ARGV[1] - ARGV[2] * 1000) \
     local reqCnt = tonumber(redis.call('ZCARD', KEYS[1]));
     local result = {} \
-    result['cnt'] = reqCnt \
     if reqCnt < tonumber(ARGV[3]) then \
-        redis.call('ZADD', KEYS[1], ARGV[1], ARGV[1]) \  
+        redis.call('ZADD', KEYS[1], ARGV[1], ARGV[1]) \ 
+        result['cnt'] = reqCnt + 1 \ 
         return cjson.encode(result) \
     else \
         local firstReq = {} \
         firstReq = redis.call("ZRANGEBYSCORE", KEYS[1], ARGV[1] - ARGV[2] * 1000, ARGV[1], "WITHSCORES", "LIMIT", 0, 1) \
+        result['cnt'] = reqCnt \ 
         result["reset"] = firstReq[2] \
         return cjson.encode(result)  \
     end \

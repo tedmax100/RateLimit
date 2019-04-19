@@ -71,7 +71,7 @@ describe("RateLimit test cases", () => {
         let rateLimitFuncSpy = jest.spyOn(reateLimitFunc, "checkRateLimt");
         const response = await request(app).get(`/`);
         expect(response.status).toBe(200);
-        expect(response.body).toBe(0);
+        expect(response.body).toBe(1);
         expect(rateLimitFuncSpy).toBeCalled();
         expect(rateLimitFuncSpy).toBeCalledWith("local", 1, 1);
     });
@@ -90,7 +90,7 @@ describe("RateLimit test cases", () => {
         await setTimeout(() => {
             request(app).get(`/`).then(response => {
                 expect(response.status).toBe(200);
-                expect(response.body).toBe(0);
+                expect(response.body).toBe(1);
                 done();
             });
             
