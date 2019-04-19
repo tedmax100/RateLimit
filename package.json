@@ -4,8 +4,40 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart" : "rimraf dist && tsc",
+    "start" : "node ./dist/index.js",
+    "test": "jest --forceExit --detectOpenHandles"
   },
   "author": "nathan.lu",
-  "license": "ISC"
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "testRegex": "./dist/test/.*.js$",
+    "verbose": true
+  },
+  "dependencies": {
+    "circular-json": "^0.5.9",
+    "express": "^4.16.4",
+    "express-winston": "^3.1.0",
+    "lodash": "^4.17.11",
+    "mkdirp": "^0.5.1",
+    "redis": "^2.8.0",
+    "rimraf": "^2.6.3",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/circular-json": "^0.4.0",
+    "@types/express": "^4.16.1",
+    "@types/express-winston": "^3.0.1",
+    "@types/jest": "^24.0.11",
+    "@types/mkdirp": "^0.5.2",
+    "@types/node": "^11.13.4",
+    "@types/redis": "^2.8.12",
+    "@types/sinon": "^7.0.11",
+    "@types/supertest": "^2.0.7",
+    "jest": "^24.7.1",
+    "sinon": "^7.3.2",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.0.2"
+  }
 }
